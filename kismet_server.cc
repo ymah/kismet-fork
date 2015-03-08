@@ -83,6 +83,7 @@
 #include "dumpfile_pcap.h"
 #include "dumpfile_netxml.h"
 #include "dumpfile_nettxt.h"
+#include "dumpfile_nettxt.h"
 #include "dumpfile_gpsxml.h"
 #include "dumpfile_tuntap.h"
 #include "dumpfile_string.h"
