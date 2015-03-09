@@ -108,7 +108,7 @@ struct pst_protosource {
 struct pst_packetsource {
 	// Source ID for IPC
 	uint16_t source_id;
-	
+
 	// We need this if we don't have a strong source
 	string interface;
 

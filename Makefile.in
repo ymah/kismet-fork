@@ -28,7 +28,7 @@ PSO	= util.o cygwin_utils.o globalregistry.o ringbuf.o \
 	manuf.o \
 	dumpfile.o dumpfile_pcap.o dumpfile_gpsxml.o \
 	dumpfile_tuntap.o dumpfile_netxml.o dumpfile_nettxt.o dumpfile_string.o \
-	dumpfile_alert.o dumpfile_devicetracker.o \
+	dumpfile_alert.o dumpfile_devicetracker.o dumpfile_json.o\
 	statealert.o \
 	kismet_server.o
 

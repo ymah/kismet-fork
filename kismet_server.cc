@@ -1203,7 +1203,10 @@ int main(int argc, char *argv[], char *envp[]) {
 	new Dumpfile_Nettxt(globalregistry);
 	if (globalregistry->fatal_condition)
 		CatchShutdown(-1);
-	new Dumpfile_Gpsxml(globalregistry);
+        new Dumpfile_Json(globalregistry);
+	if (globalregistry->fatal_condition)
+		CatchShutdown(-1);
+        new Dumpfile_Gpsxml(globalregistry);
 	if (globalregistry->fatal_condition)
 		CatchShutdown(-1);
 	new Dumpfile_String(globalregistry);
