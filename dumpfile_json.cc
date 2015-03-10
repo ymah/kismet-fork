@@ -128,7 +128,7 @@ int Dumpfile_Json::Flush(){
 
   int netnum = 0;
   // Dump all the networks
-  fprintf(jsonfile,"\"Networks\" : [\n");
+  fprintf(jsonfile,"{\"Networks\" : [\n");
   finalIte = tracknet.end();
   finalIte--;
   for (x = tracknet.begin(); x != tracknet.end(); ++x) {
@@ -667,12 +667,12 @@ int Dumpfile_Json::Flush(){
     fprintf(jsonfile,"}\n");
     fprintf(jsonfile,"}\n");
     fprintf(jsonfile,"}\n");
-    fprintf(jsonfile,"}");
+    fprintf(jsonfile,"}\n");
+
     if((x != finalIte) & (x != tracknet.end()))
       fprintf(jsonfile,",");
   }
-  fprintf(jsonfile,"]");
-
+  fprintf(jsonfile,"]}");
 
   fflush(jsonfile);
   
