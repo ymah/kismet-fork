@@ -220,15 +220,13 @@ int Dumpfile_Json::Flush(){
                 m->second->dot11d_country.c_str());
       }
       fprintf(jsonfile,"\"Encryption\" : [");
-      /******
-             TODO:
-             Enregister toutes les securité dispo et n'imprimer qu'apres les secu dispo avec une boucle pour
 
-      *****/
       int i;
       int listeCrypt[20];
+
       for(i = 0;i<20;i++)
         listeCrypt[i] = 0;
+
       i = 0;
       if (m->second->cryptset == 0){
         // fprintf(jsonfile, "  \"None\"");
@@ -393,25 +391,82 @@ int Dumpfile_Json::Flush(){
     }
     fprintf(jsonfile, " \"Max Seen\"   : %d,\n", net->snrdata.maxseenrate * 100);
 
+    int listeCarrier[8];
+    int i;
+    for(i=0;i<8;i++)
+      listeCarrier[i]=0;
+
 
     fprintf(jsonfile, " \"Carrier\"    : [");
+    i = -1;
     if (net->snrdata.carrierset & (1 << (int) carrier_80211b))
-      fprintf(jsonfile, " \"IEEE 802.11b\",\n");
+      {
+        i++;
+        listeCarrier[i] = 1;
+      }
+
     if (net->snrdata.carrierset & (1 << (int) carrier_80211bplus))
-      fprintf(jsonfile, " \"IEEE 802.11b+\",\n");
-    if (net->snrdata.carrierset & (1 << (int) carrier_80211a))
-      fprintf(jsonfile, " \"IEEE 802.11a\",\n");
+      {
+        i++;
+        listeCarrier[i] = 1;
+      }
+      if (net->snrdata.carrierset & (1 << (int) carrier_80211a))
+      {
+        i++;
+        listeCarrier[i] = 1;
+      }
     if (net->snrdata.carrierset & (1 << (int) carrier_80211g))
-      fprintf(jsonfile, " \"IEEE 802.11g\",\n");
+      {
+        i++;
+        listeCarrier[i] = 1;
+      }
     if (net->snrdata.carrierset & (1 << (int) carrier_80211fhss))
-      fprintf(jsonfile, " \"IEEE 802.11 FHSS\",\n");
+      {
+        i++;
+        listeCarrier[i] = 1;
+      }
     if (net->snrdata.carrierset & (1 << (int) carrier_80211dsss))
-      fprintf(jsonfile, " \"IEEE 802.11 DSSS\",\n");
+      {
+        i++;
+        listeCarrier[i] = 1;
+      }
     if (net->snrdata.carrierset & (1 << (int) carrier_80211n20))
-      fprintf(jsonfile, " \"IEEE 802.11n 20MHz\",\n");
+      {
+        i++;
+        listeCarrier[i] = 1;
+      }
     if (net->snrdata.carrierset & (1 << (int) carrier_80211n40))
-      fprintf(jsonfile, " \"IEEE 802.11n 40MHz\",\n");
+      {
+        i++;
+        listeCarrier[i] = 1;
+      }
+
+    int j;
+    for(j=0;j<i;j++){
+      if(i < 0;)
+        break;
+      if ((net->snrdata.carrierset & (1 << (int) carrier_80211b)) & listeCarrier[j])
+        fprintf(jsonfile, " \"IEEE 802.11b\"\n");
+      if ((net->snrdata.carrierset & (1 << (int) carrier_80211bplus))  & listeCarrier[j])
+        fprintf(jsonfile, " \"IEEE 802.11b+\"\n");
+      if ((net->snrdata.carrierset & (1 << (int) carrier_80211a)) & listeCarrier[j])
+          fprintf(jsonfile, " \"IEEE 802.11a\"\n");
+      if ((net->snrdata.carrierset & (1 << (int) carrier_80211g)) & listeCarrier[j])
+        fprintf(jsonfile, " \"IEEE 802.11g\"\n");
+      if ((net->snrdata.carrierset & (1 << (int) carrier_80211fhss)) & listeCarrier[j])
+        fprintf(jsonfile, " \"IEEE 802.11 FHSS\"\n");
+      if ((net->snrdata.carrierset & (1 << (int) carrier_80211dsss))  & listeCarrier[j])
+        fprintf(jsonfile, " \"IEEE 802.11 DSSS\"\n");
+      if( (net->snrdata.carrierset & (1 << (int) carrier_80211n20)) & listeCarrier[j])
+        fprintf(jsonfile, " \"IEEE 802.11n 20MHz\"\n");
+      if( (net->snrdata.carrierset & (1 << (int) carrier_80211n40)) & listeCarrier[j])
+        fprintf(jsonfile, " \"IEEE 802.11n 40MHz\"\n");
+      if(j < i - 1)
+        fprintf(jsonfile,",");
+    }
     fprintf(jsonfile, " ],\n");
+
+
 
     fprintf(jsonfile, " \"Enconding\"    : [");
     if (net->snrdata.encodingset & (1 << (int) encoding_cck))
