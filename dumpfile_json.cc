@@ -123,12 +123,14 @@ int Dumpfile_Json::Flush(){
   const vector<kis_alert_info *> *alerts =
     globalreg->alertracker->FetchBacklog();
 
-  map<mac_addr, Netracker::tracked_network *>::const_iterator x;
+  map<mac_addr, Netracker::tracked_network *>::const_iterator x,finalIte;
   map<mac_addr, Netracker::tracked_client *>::const_iterator y;
 
   int netnum = 0;
-
   // Dump all the networks
+  fprintf(jsonfile,"\"Networks\" : [\n");
+  finalIte = tracknet.end();
+  finalIte--;
   for (x = tracknet.begin(); x != tracknet.end(); ++x) {
     netnum++;
 
@@ -174,13 +176,11 @@ int Dumpfile_Json::Flush(){
 
     int ssidnum = 1;
     fprintf(jsonfile,"\"détail_BSSID\":{\n");
-    for (map<uint32_t, Netracker::adv_ssid_data *>::iterator finalIte,m  =
+    for (map<uint32_t, Netracker::adv_ssid_data *>::iterator m  =
            net->ssid_map.begin(); m != net->ssid_map.end(); ++m) {
 
-      finalIte = net->ssid_map.end();
-      finalIte--;
-      fprintf(jsonfile,"\"SSID_num\":%d,\n",ssidnum);
-      fprintf(jsonfile,"\"SSID_info\":{\n");
+      fprintf(jsonfile,"\"SSID_Num\":%d,\n",ssidnum);
+      fprintf(jsonfile,"\"SSID_Info\":{\n");
       string typestr;
       switch(m->second->type){
       case ssid_beacon:
@@ -353,75 +353,101 @@ int Dumpfile_Json::Flush(){
           break;
         case 1:
           if(listeCrypt[j])
-          fprintf(jsonfile, "  \"WEP\"");
+            fprintf(jsonfile, "  \"WEP\"");
           break;
         case 2:
+          if(listeCrypt[j])
+            fprintf(jsonfile, "    \"Layer3\"");
           break;
         case 3:
+          if(listeCrypt[j])
+            fprintf(jsonfile, "    \"WPA Migration Mode\"");
           break;
         case 4:
+          if (listeCrypt[j] ){
+            fprintf(jsonfile, "    \"WPA Migration Mode\"");
+          }
+
           break;
         case 5:
+          if (listeCrypt[j]){
+            fprintf(jsonfile, "   \"WEP40\"");
+          }
+
           break;
         case 6:
+          if (listeCrypt[j]){
+            fprintf(jsonfile, "   \"WEP40\"");
+          }
           break;
         case 7:
+          if (listeCrypt[j]){
+            fprintf(jsonfile, "    \"WEP104\"");
+          }
+          break;
+        case 8:
+
+          if (listeCrypt[j]){
+            fprintf(jsonfile, "    \"WPA+PSK\"");
+          }
+          break;
+        case 9:
+
+          if (listeCrypt[j]){
+            fprintf(jsonfile, "    \"WPA+TKIP\"");
+          }
+          break;
+        case 10:
+          if (listeCrypt[j]){
+            fprintf(jsonfile, "    \"WPA+AES-OCB\"");
+          }
+        case 11:
+          if (listeCrypt[j]){
+            fprintf(jsonfile, "    \"WPA+AES-CCM\"");
+          }
+          break;
+        case 12:
+          if (listeCrypt[j]){
+            fprintf(jsonfile, "    \"WPA+LEAP\"");
+          }
+        case 13:
+          if (listeCrypt[j]){
+            fprintf(jsonfile, "    \"WPA+TTLS\"");
+          }
+          break;
+        case 14:
+          if (listeCrypt[j]){
+            fprintf(jsonfile, "    \"WPA+TLS\"");
+          }
+          break;
+        case 15:
+          if (listeCrypt[j]){
+            fprintf(jsonfile, "    \"WPA+PEAP\"");
+          }
+        case 16:
+          if (listeCrypt[j]){
+            fprintf(jsonfile, "    \"ISAKMP\"");
+          }
+          break;
+        case 17:
+          if (listeCrypt[j]){
+            fprintf(jsonfile, "    \"PPTP\"");
+          }
+          break;
+        case 18:
+          if (listeCrypt[j] ){
+            fprintf(jsonfile, "    \"Fortress\"");
+          }
+          break;
+        case 19:
+          if (listeCrypt[j]){
+            fprintf(jsonfile, "    \"Keyguard\"");
+          }
           break;
         default:
           break;
         }
-
-        if ((m->second->cryptset == crypt_wep)  & listeCrypt[j]){
-        }
-        if ((m->second->cryptset & crypt_layer3)  & listeCrypt[j]){
-          fprintf(jsonfile, "    \"Layer3\"");
-        }
-        if ((m->second->cryptset & crypt_wpa_migmode)  & listeCrypt[j] ){
-          fprintf(jsonfile, "    \"WPA Migration Mode\"");
-        }
-        if ((m->second->cryptset & crypt_wep40)  & listeCrypt[j]){
-          fprintf(jsonfile, "   \"WEP40\"");
-        }
-        if ((m->second->cryptset & crypt_wep104)  & listeCrypt[j]){
-          fprintf(jsonfile, "    \"WEP104\"");
-        }
-        if ((m->second->cryptset & crypt_psk)  & listeCrypt[j]){
-          fprintf(jsonfile, "    \"WPA+PSK\"");
-        }
-        if ((m->second->cryptset & crypt_tkip)  & listeCrypt[j]){
-          fprintf(jsonfile, "    \"WPA+TKIP\"");
-        }
-        if ((m->second->cryptset & crypt_aes_ocb)  & listeCrypt[j]){
-          fprintf(jsonfile, "    \"WPA+AES-OCB\"");
-        }
-        if ((m->second->cryptset & crypt_aes_ccm)  & listeCrypt[j]){
-          fprintf(jsonfile, "    \"WPA+AES-CCM\"");
-        }
-        if ((m->second->cryptset & crypt_leap)  & listeCrypt[j]){
-          fprintf(jsonfile, "    \"WPA+LEAP\"");
-        }
-        if ((m->second->cryptset & crypt_ttls)  & listeCrypt[j]){
-          fprintf(jsonfile, "    \"WPA+TTLS\"");
-        }
-        if ((m->second->cryptset & crypt_tls)  & listeCrypt[j]){
-          fprintf(jsonfile, "    \"WPA+TLS\"");
-        }
-        if ((m->second->cryptset & crypt_peap)  & listeCrypt[j]){
-          fprintf(jsonfile, "    \"WPA+PEAP\"");
-        }
-        if ((m->second->cryptset & crypt_isakmp)  & listeCrypt[j]){
-          fprintf(jsonfile, "    \"ISAKMP\"");
-        }
-        if ((m->second->cryptset & crypt_pptp)  & listeCrypt[j]){
-          fprintf(jsonfile, "    \"PPTP\"");
-        }
-        if ((m->second->cryptset & crypt_fortress)  & listeCrypt[j] ){
-          fprintf(jsonfile, "    \"Fortress\"");
-        }
-        if ((m->second->cryptset & crypt_keyguard)  & listeCrypt[j]){
-          fprintf(jsonfile, "    \"Keyguard\"");
-        }
-        if((j>0) & (j < (i - 1)))
+        if(j < i)
           fprintf(jsonfile, ",");
       }
       fprintf(jsonfile, " ],\n");
@@ -483,40 +509,102 @@ int Dumpfile_Json::Flush(){
     int j;
 
     for(j=0;j<=i;j++){
-      if (!(net->snrdata.carrierset & (1 << (int) carrier_80211b)) & listeCarrier[j])
-        fprintf(jsonfile, " \"IEEE 802.11b\"");
-      if ((net->snrdata.carrierset & (1 << (int) carrier_80211bplus))  & listeCarrier[j])
-        fprintf(jsonfile, " \"IEEE 802.11b+\"");
-      if ((net->snrdata.carrierset & (1 << (int) carrier_80211a)) & listeCarrier[j])
-        fprintf(jsonfile, " \"IEEE 802.11a\"");
-      if ((net->snrdata.carrierset & (1 << (int) carrier_80211g)) & listeCarrier[j])
-        fprintf(jsonfile, " \"IEEE 802.11g\"");
-      if ((net->snrdata.carrierset & (1 << (int) carrier_80211fhss)) & listeCarrier[j])
-        fprintf(jsonfile, " \"IEEE 802.11 FHSS\"");
-      if ((net->snrdata.carrierset & (1 << (int) carrier_80211dsss))  & listeCarrier[j])
-        fprintf(jsonfile, " \"IEEE 802.11 DSSS\"");
-      if( (net->snrdata.carrierset & (1 << (int) carrier_80211n20)) & listeCarrier[j])
-        fprintf(jsonfile, " \"IEEE 802.11n 20MHz\"");
-      if( (net->snrdata.carrierset & (1 << (int) carrier_80211n40)) & listeCarrier[j])
-        fprintf(jsonfile, " \"IEEE 802.11n 40MHz\"");
-      if((j > 0 ) & (j < i - 1))
-        fprintf(jsonfile,",");
+      switch(j){
+      case 0:
+        if (listeCarrier[j])
+          fprintf(jsonfile, " \"IEEE 802.11b\"");
+        break;
+      case 1:
+        if (listeCarrier[j])
+          fprintf(jsonfile, " \"IEEE 802.11b+\"");
+        break;
+      case 2:
+        if (listeCarrier[j])
+          fprintf(jsonfile, " \"IEEE 802.11a\"");
+        break;
+      case 3:
+        if ((net->snrdata.carrierset & (1 << (int) carrier_80211g)) & listeCarrier[j])
+          fprintf(jsonfile, " \"IEEE 802.11g\"");
+        break;
+      case 4:
+        if (listeCarrier[j])
+          fprintf(jsonfile, " \"IEEE 802.11 FHSS\"");
+        break;
+      case 5:
+        if (listeCarrier[j])
+          fprintf(jsonfile, " \"IEEE 802.11 DSSS\"");
+        break;
+      case 6:
+        if( listeCarrier[j])
+          fprintf(jsonfile, " \"IEEE 802.11n 20MHz\"");
+        break;
+      case 7:
+        if( listeCarrier[j])
+          fprintf(jsonfile, " \"IEEE 802.11n 40MHz\"");
+        break;
+      }
+      if(j < i)
+        fprintf(jsonfile, ",");
     }
     fprintf(jsonfile, " ],\n");
 
+    int listeEnco[5];
+    i = 0;
+    for(i=0;i<5;i++)
+      listeEnco[i] = 0;
+    i = -1;
+    if (net->snrdata.encodingset & (1 << (int) encoding_cck)){
+      i++;
+      listeEnco[i] = 1;
+    }
+    if (net->snrdata.encodingset & (1 << (int) encoding_pbcc)){
+      i++;
+      listeEnco[i] = 1;
+    }
+    if (net->snrdata.encodingset & (1 << (int) encoding_ofdm)){
+      i++;
+      listeEnco[i] = 1;
+    }
 
+    if (net->snrdata.encodingset & (1 << (int) encoding_dynamiccck)){
+      i++;
+      listeEnco[i] = 1;
+    }
+
+    if (net->snrdata.encodingset & (1 << (int) encoding_gfsk)){
+      i++;
+      listeEnco[i] = 1;
+      if(j < i)
+        fprintf(jsonfile, ",");
+    }
 
     fprintf(jsonfile, " \"Enconding\"    : [");
-    if (net->snrdata.encodingset & (1 << (int) encoding_cck))
-      fprintf(jsonfile, " \"CCK\",\n");
-    if (net->snrdata.encodingset & (1 << (int) encoding_pbcc))
-      fprintf(jsonfile, " \"PBCC\",\n");
-    if (net->snrdata.encodingset & (1 << (int) encoding_ofdm))
-      fprintf(jsonfile, " \"OFDM\",\n");
-    if (net->snrdata.encodingset & (1 << (int) encoding_dynamiccck))
-      fprintf(jsonfile, " \"Dynamic CCK-OFDM\",\n");
-    if (net->snrdata.encodingset & (1 << (int) encoding_gfsk))
-      fprintf(jsonfile, " GFSK,\n");
+
+    for(j=0;j<i;j++){
+      switch(j){
+      case 0:
+        if (listeEnco[j])
+          fprintf(jsonfile, " \"CCK\",\n");
+        break;
+      case 1:
+        if(listeEnco[j])
+          fprintf(jsonfile, " \"PBCC\",\n");
+        break;
+      case 2:
+        if(listeEnco[j])
+          fprintf(jsonfile, " \"OFDM\",\n");
+        break;
+      case 3:
+        if(listeEnco[j])
+          fprintf(jsonfile, " \"Dynamic CCK-OFDM\",\n");
+        break;
+      case 4:
+        if(listeEnco[j])
+          fprintf(jsonfile, " GFSK,\n");
+        break;
+      }
+
+    }
     fprintf(jsonfile, " ],\n");
 
     fprintf(jsonfile, " \"LLC\"        : %d,\n", net->llc_packets);
@@ -579,10 +667,11 @@ int Dumpfile_Json::Flush(){
     fprintf(jsonfile,"}\n");
     fprintf(jsonfile,"}\n");
     fprintf(jsonfile,"}\n");
-
-
+    fprintf(jsonfile,"}");
+    if((x != finalIte) & (x != tracknet.end()))
+      fprintf(jsonfile,",");
   }
-
+  fprintf(jsonfile,"]");
 
 
   fflush(jsonfile);
