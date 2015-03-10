@@ -227,36 +227,41 @@ int Dumpfile_Json::Flush(){
       for(i = 0;i<20;i++)
         listeCrypt[i] = 0;
 
-      i = 0;
+      i = -1;
       if (m->second->cryptset == 0){
         // fprintf(jsonfile, "  \"None\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
+
       }
       if (m->second->cryptset == crypt_wep){
         //fprintf(jsonfile, "  \"WEP\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
+
       }
       if (m->second->cryptset & crypt_layer3){
         //fprintf(jsonfile, "    \"Layer3\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
+
       }
       if (m->second->cryptset & crypt_wpa_migmode){
         //fprintf(jsonfile, "    \"WPA Migration Mode\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
+
       }
       if (m->second->cryptset & crypt_wep40){
         //fprintf(jsonfile, "   \"WEP40\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
+
       }
       if (m->second->cryptset & crypt_wep104){
         //fprintf(jsonfile, "    \"WEP104\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
       }
       /*
         if (m->second->cryptset & crypt_wpa)
@@ -266,73 +271,107 @@ int Dumpfile_Json::Flush(){
 
       if (m->second->cryptset & crypt_psk){
         //fprintf(jsonfile, "    \"WPA+PSK\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
+
       }
       if (m->second->cryptset & crypt_tkip){
         //fprintf(jsonfile, "    \"WPA+TKIP\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
+
       }
       if (m->second->cryptset & crypt_aes_ocb){
         //fprintf(jsonfile, "    \"WPA+AES-OCB\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
+
       }
       if (m->second->cryptset & crypt_aes_ccm){
         //fprintf(jsonfile, "    \"WPA+AES-CCM\"");
+        i++; 
         listeCrypt[i] = 1;
-        i++;
+
       }
       if (m->second->cryptset & crypt_leap){
         //fprintf(jsonfile, "    \"WPA+LEAP\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
+
       }
       if (m->second->cryptset & crypt_ttls){
         //fprintf(jsonfile, "    \"WPA+TTLS\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
+
       }
       if (m->second->cryptset & crypt_tls){
         //fprintf(jsonfile, "    \"WPA+TLS\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
+
       }
       if (m->second->cryptset & crypt_peap){
         //fprintf(jsonfile, "    \"WPA+PEAP\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
+
       }
       if (m->second->cryptset & crypt_isakmp){
         //fprintf(jsonfile, "    \"ISAKMP\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
+
       }
       if (m->second->cryptset & crypt_pptp){
         //fprintf(jsonfile, "    \"PPTP\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
+
       }
       if (m->second->cryptset & crypt_fortress){
         //fprintf(jsonfile, "    \"Fortress\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
+
       }
       if (m->second->cryptset & crypt_keyguard){
         //fprintf(jsonfile, "    \"Keyguard\"");
-        listeCrypt[i] = 1;
         i++;
+        listeCrypt[i] = 1;
+
       }
       int j;
 
-
-      for(j=0;j<i;j++){
-        if ((m->second->cryptset == 0) & listeCrypt[j]){
-          fprintf(jsonfile, "  \"None\"");
-        }
-        if ((m->second->cryptset == crypt_wep)  & listeCrypt[j]){
+      for(j=0;j<=i;j++){
+        // if(i == -1)
+        //   break;
+        switch(j){
+        case 0:
+          if(listeCrypt[j])
+            fprintf(jsonfile, "  \"None\"");
+          break;
+        case 1:
+          if(listeCrypt[j])
           fprintf(jsonfile, "  \"WEP\"");
+          break;
+        case 2:
+          break;
+        case 3:
+          break;
+        case 4:
+          break;
+        case 5:
+          break;
+        case 6:
+          break;
+        case 7:
+          break;
+        default:
+          break;
+        }
+
+        if ((m->second->cryptset == crypt_wep)  & listeCrypt[j]){
         }
         if ((m->second->cryptset & crypt_layer3)  & listeCrypt[j]){
           fprintf(jsonfile, "    \"Layer3\"");
@@ -382,7 +421,7 @@ int Dumpfile_Json::Flush(){
         if ((m->second->cryptset & crypt_keyguard)  & listeCrypt[j]){
           fprintf(jsonfile, "    \"Keyguard\"");
         }
-        if(j < (i - 1))
+        if((j>0) & (j < (i - 1)))
           fprintf(jsonfile, ",");
       }
       fprintf(jsonfile, " ],\n");
@@ -410,7 +449,7 @@ int Dumpfile_Json::Flush(){
         i++;
         listeCarrier[i] = 1;
       }
-      if (net->snrdata.carrierset & (1 << (int) carrier_80211a))
+    if (net->snrdata.carrierset & (1 << (int) carrier_80211a))
       {
         i++;
         listeCarrier[i] = 1;
@@ -442,26 +481,25 @@ int Dumpfile_Json::Flush(){
       }
 
     int j;
-    for(j=0;j<i;j++){
-      if(i < 0;)
-        break;
-      if ((net->snrdata.carrierset & (1 << (int) carrier_80211b)) & listeCarrier[j])
-        fprintf(jsonfile, " \"IEEE 802.11b\"\n");
+
+    for(j=0;j<=i;j++){
+      if (!(net->snrdata.carrierset & (1 << (int) carrier_80211b)) & listeCarrier[j])
+        fprintf(jsonfile, " \"IEEE 802.11b\"");
       if ((net->snrdata.carrierset & (1 << (int) carrier_80211bplus))  & listeCarrier[j])
-        fprintf(jsonfile, " \"IEEE 802.11b+\"\n");
+        fprintf(jsonfile, " \"IEEE 802.11b+\"");
       if ((net->snrdata.carrierset & (1 << (int) carrier_80211a)) & listeCarrier[j])
-          fprintf(jsonfile, " \"IEEE 802.11a\"\n");
+        fprintf(jsonfile, " \"IEEE 802.11a\"");
       if ((net->snrdata.carrierset & (1 << (int) carrier_80211g)) & listeCarrier[j])
-        fprintf(jsonfile, " \"IEEE 802.11g\"\n");
+        fprintf(jsonfile, " \"IEEE 802.11g\"");
       if ((net->snrdata.carrierset & (1 << (int) carrier_80211fhss)) & listeCarrier[j])
-        fprintf(jsonfile, " \"IEEE 802.11 FHSS\"\n");
+        fprintf(jsonfile, " \"IEEE 802.11 FHSS\"");
       if ((net->snrdata.carrierset & (1 << (int) carrier_80211dsss))  & listeCarrier[j])
-        fprintf(jsonfile, " \"IEEE 802.11 DSSS\"\n");
+        fprintf(jsonfile, " \"IEEE 802.11 DSSS\"");
       if( (net->snrdata.carrierset & (1 << (int) carrier_80211n20)) & listeCarrier[j])
-        fprintf(jsonfile, " \"IEEE 802.11n 20MHz\"\n");
+        fprintf(jsonfile, " \"IEEE 802.11n 20MHz\"");
       if( (net->snrdata.carrierset & (1 << (int) carrier_80211n40)) & listeCarrier[j])
-        fprintf(jsonfile, " \"IEEE 802.11n 40MHz\"\n");
-      if(j < i - 1)
+        fprintf(jsonfile, " \"IEEE 802.11n 40MHz\"");
+      if((j > 0 ) & (j < i - 1))
         fprintf(jsonfile,",");
     }
     fprintf(jsonfile, " ],\n");
@@ -487,7 +525,7 @@ int Dumpfile_Json::Flush(){
     fprintf(jsonfile, " \"Fragments\"  : %d,\n", net->fragments);
     fprintf(jsonfile, " \"Retries\"    : %d,\n", net->retries);
     fprintf(jsonfile, " \"Total\"      : %d,\n", net->llc_packets + net->data_packets);
-    fprintf(jsonfile, " \"Datasize\"   : %llu,\n",
+    fprintf(jsonfile, " \"Datasize\"   : %llu",
             (long long unsigned int) net->datasize);
 
     if (net->gpsdata.gps_valid) {
@@ -509,6 +547,7 @@ int Dumpfile_Json::Flush(){
     if (net->guess_ipdata.ip_type > ipdata_factoryguess && 
         net->guess_ipdata.ip_type < ipdata_group) {
       string iptype;
+      fprintf(jsonfile,",");
       switch (net->guess_ipdata.ip_type) {
       case ipdata_udptcp:
         iptype = "UDP/TCP";
@@ -532,7 +571,7 @@ int Dumpfile_Json::Flush(){
       fprintf(jsonfile, " \"IP Gateway\" : %s,\n", 
               inet_ntoa(net->guess_ipdata.ip_gateway));
 
-      fprintf(jsonfile, " \"Last BSSTS\" : %llu,\n", 
+      fprintf(jsonfile, " \"Last BSSTS\" : %llu\n", 
               (long long unsigned int) net->bss_timestamp);
 
     }
