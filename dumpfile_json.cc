@@ -124,7 +124,7 @@ int Dumpfile_Json::Flush(){
     globalreg->alertracker->FetchBacklog();
 
   map<mac_addr, Netracker::tracked_network *>::const_iterator x,finalIte;
-  map<mac_addr, Netracker::tracked_client *>::const_iterator y;
+  map<mac_addr, Netracker::tracked_client *>::const_iterator y,iteClient;
 
   int netnum = 0;
   // Dump all the networks
@@ -607,6 +607,7 @@ int Dumpfile_Json::Flush(){
     }
     fprintf(jsonfile, " ],\n");
 
+    fprintf(jsonfile, " \"Channel\"    : %d,\n", net->channel);
     fprintf(jsonfile, " \"LLC\"        : %d,\n", net->llc_packets);
     fprintf(jsonfile, " \"Data\"       : %d,\n", net->data_packets);
     fprintf(jsonfile, " \"Crypt\"      : %d,\n", net->crypt_packets);
@@ -662,6 +663,51 @@ int Dumpfile_Json::Flush(){
       fprintf(jsonfile, " \"Last BSSTS\" : %llu\n", 
               (long long unsigned int) net->bss_timestamp);
 
+      fprintf(jsonfile,"\"Clients\" :[");
+
+      int clinum = 0;
+      iteClient = net->client_map.end();
+      iteClient--;
+      for (y = net->client_map.begin(); y != net->client_map.end(); ++y){
+        Netracker::tracked_client *cli = y->second;
+        clinum++;
+        if (cli->type == client_remove)
+          continue;
+        string ctype;
+        switch (cli->type) {
+        case client_fromds:
+          ctype = "From Distribution";
+          break;
+        case client_tods:
+          ctype = "To Distribution";
+          break;
+        case client_interds:
+          ctype = "Inter-Distribution";
+          break;
+        case client_established:
+          ctype = "Established";
+          break;
+        case client_adhoc:
+          ctype = "Ad-hoc";
+          break;
+        default:
+          ctype = "Unknown";
+          break;
+        }
+
+        fprintf(jsonfile, " \"Client\" %d : {",clinum);
+        fprintf(jsonfile, "  \"Manuf\"      : \"%s\",\n", cli->manuf.c_str());
+        fprintf(jsonfile, "  \"First\"      : \"%.24s\",\n", ctime(&(cli->first_time)));
+        fprintf(jsonfile, "  \"Last\"       : \"%.24s\",\n", ctime(&(cli->last_time)));
+        fprintf(jsonfile, "  \"Type\"       : \"%s\",\n", ctype.c_str());
+        fprintf(jsonfile, "  \"MAC\"        : \"%s\",\n", cli->mac.Mac2String().c_str());
+        fprintf(jsonfile,"}");
+        if(y == iteClient)
+          fprintf(jsonfile,",\n");
+        else
+          fprintf(jsonfile,"\n");
+      }
+      fprintf(jsonfile,"]");
     }
 
     fprintf(jsonfile,"}\n");
