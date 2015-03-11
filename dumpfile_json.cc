@@ -221,234 +221,278 @@ int Dumpfile_Json::Flush(){
       }
       fprintf(jsonfile,"\"Encryption\" : [");
 
-      int i;
+      int i,cpt;
       int listeCrypt[20];
 
       for(i = 0;i<20;i++)
         listeCrypt[i] = 0;
 
-      i = -1;
+      cpt = 0;
+      i = 0;
       if (m->second->cryptset == 0){
         // fprintf(jsonfile, "  \"None\"");
-        i++;
         listeCrypt[i] = 1;
-
+        cpt++;
       }
+        i++;
       if (m->second->cryptset == crypt_wep){
         //fprintf(jsonfile, "  \"WEP\"");
-        i++;
-        listeCrypt[i] = 1;
 
+        listeCrypt[i] = 1;
+        cpt++;
       }
+        i++;
       if (m->second->cryptset & crypt_layer3){
         //fprintf(jsonfile, "    \"Layer3\"");
-        i++;
-        listeCrypt[i] = 1;
 
+        listeCrypt[i] = 1;
+        cpt++;
       }
+        i++;
       if (m->second->cryptset & crypt_wpa_migmode){
         //fprintf(jsonfile, "    \"WPA Migration Mode\"");
-        i++;
-        listeCrypt[i] = 1;
 
+        listeCrypt[i] = 1;
+        cpt++;
       }
+        i++;
       if (m->second->cryptset & crypt_wep40){
         //fprintf(jsonfile, "   \"WEP40\"");
-        i++;
-        listeCrypt[i] = 1;
 
+        listeCrypt[i] = 1;
+        cpt++;
       }
+        i++;
       if (m->second->cryptset & crypt_wep104){
         //fprintf(jsonfile, "    \"WEP104\"");
-        i++;
+
         listeCrypt[i] = 1;
+        cpt++;
       }
       /*
         if (m->second->cryptset & crypt_wpa)
         fprintf(jsonfile, "    Encryption : WPA\n");
       */
 
-
+        i++;
       if (m->second->cryptset & crypt_psk){
         //fprintf(jsonfile, "    \"WPA+PSK\"");
-        i++;
-        listeCrypt[i] = 1;
 
+        listeCrypt[i] = 1;
+        cpt++;
       }
+        i++;
+
       if (m->second->cryptset & crypt_tkip){
         //fprintf(jsonfile, "    \"WPA+TKIP\"");
-        i++;
-        listeCrypt[i] = 1;
 
+        listeCrypt[i] = 1;
+        cpt++;
       }
+      i++;
       if (m->second->cryptset & crypt_aes_ocb){
         //fprintf(jsonfile, "    \"WPA+AES-OCB\"");
-        i++;
-        listeCrypt[i] = 1;
 
+        listeCrypt[i] = 1;
+        cpt++;
       }
+        i++;
       if (m->second->cryptset & crypt_aes_ccm){
         //fprintf(jsonfile, "    \"WPA+AES-CCM\"");
-        i++; 
-        listeCrypt[i] = 1;
 
+        listeCrypt[i] = 1;
+        cpt++;
       }
+        i++;
       if (m->second->cryptset & crypt_leap){
         //fprintf(jsonfile, "    \"WPA+LEAP\"");
-        i++;
-        listeCrypt[i] = 1;
 
+        listeCrypt[i] = 1;
+        cpt++;
       }
+        i++; 
+
       if (m->second->cryptset & crypt_ttls){
         //fprintf(jsonfile, "    \"WPA+TTLS\"");
-        i++;
         listeCrypt[i] = 1;
-
+        cpt++;
       }
+      i++;
       if (m->second->cryptset & crypt_tls){
         //fprintf(jsonfile, "    \"WPA+TLS\"");
-        i++;
-        listeCrypt[i] = 1;
 
+        listeCrypt[i] = 1;
+        cpt++;
       }
+      i++;
       if (m->second->cryptset & crypt_peap){
         //fprintf(jsonfile, "    \"WPA+PEAP\"");
-        i++;
-        listeCrypt[i] = 1;
 
+        listeCrypt[i] = 1;
+        cpt++;
       }
+      i++;
       if (m->second->cryptset & crypt_isakmp){
         //fprintf(jsonfile, "    \"ISAKMP\"");
-        i++;
-        listeCrypt[i] = 1;
 
+        listeCrypt[i] = 1;
+        cpt++;
       }
+      i++;
       if (m->second->cryptset & crypt_pptp){
         //fprintf(jsonfile, "    \"PPTP\"");
-        i++;
-        listeCrypt[i] = 1;
 
+        listeCrypt[i] = 1;
+        cpt++;
       }
+      i++;
       if (m->second->cryptset & crypt_fortress){
         //fprintf(jsonfile, "    \"Fortress\"");
-        i++;
-        listeCrypt[i] = 1;
 
+        listeCrypt[i] = 1;
+        cpt++;
       }
+      i++;
       if (m->second->cryptset & crypt_keyguard){
         //fprintf(jsonfile, "    \"Keyguard\"");
-        i++;
-        listeCrypt[i] = 1;
 
+        listeCrypt[i] = 1;
+        cpt++;
       }
+      cpt++;
       int j;
 
-      for(j=0;j<=i;j++){
+      for(j=0;j<i;j++){
         // if(i == -1)
         //   break;
         switch(j){
         case 0:
-          if(listeCrypt[j])
+          if(listeCrypt[j]){
             fprintf(jsonfile, "  \"None\"");
+            cpt--;
+          }
           break;
         case 1:
-          if(listeCrypt[j])
+          if(listeCrypt[j]){
             fprintf(jsonfile, "  \"WEP\"");
+            cpt--;
+          }
           break;
         case 2:
-          if(listeCrypt[j])
+          if(listeCrypt[j]){
             fprintf(jsonfile, "    \"Layer3\"");
+            cpt--;
+          }
           break;
         case 3:
-          if(listeCrypt[j])
+          if(listeCrypt[j]){
             fprintf(jsonfile, "    \"WPA Migration Mode\"");
+            cpt--;
+          }
           break;
         case 4:
           if (listeCrypt[j] ){
             fprintf(jsonfile, "    \"WPA Migration Mode\"");
+            cpt--;
           }
-
           break;
         case 5:
           if (listeCrypt[j]){
             fprintf(jsonfile, "   \"WEP40\"");
+            cpt--;
           }
 
           break;
         case 6:
           if (listeCrypt[j]){
             fprintf(jsonfile, "   \"WEP40\"");
+            cpt--;
           }
           break;
         case 7:
           if (listeCrypt[j]){
             fprintf(jsonfile, "    \"WEP104\"");
+            cpt--;
           }
           break;
         case 8:
 
           if (listeCrypt[j]){
             fprintf(jsonfile, "    \"WPA+PSK\"");
+            cpt--;
           }
           break;
         case 9:
 
           if (listeCrypt[j]){
             fprintf(jsonfile, "    \"WPA+TKIP\"");
+            cpt--;
           }
           break;
         case 10:
           if (listeCrypt[j]){
             fprintf(jsonfile, "    \"WPA+AES-OCB\"");
+            cpt--;
           }
         case 11:
           if (listeCrypt[j]){
             fprintf(jsonfile, "    \"WPA+AES-CCM\"");
+            cpt--;
           }
           break;
         case 12:
           if (listeCrypt[j]){
             fprintf(jsonfile, "    \"WPA+LEAP\"");
+            cpt--;
           }
         case 13:
           if (listeCrypt[j]){
             fprintf(jsonfile, "    \"WPA+TTLS\"");
+            cpt--;
           }
           break;
         case 14:
           if (listeCrypt[j]){
             fprintf(jsonfile, "    \"WPA+TLS\"");
+            cpt--;
           }
           break;
         case 15:
           if (listeCrypt[j]){
             fprintf(jsonfile, "    \"WPA+PEAP\"");
+            cpt--;
           }
         case 16:
           if (listeCrypt[j]){
             fprintf(jsonfile, "    \"ISAKMP\"");
+            cpt--;
           }
           break;
         case 17:
           if (listeCrypt[j]){
             fprintf(jsonfile, "    \"PPTP\"");
+            cpt--;
           }
           break;
         case 18:
           if (listeCrypt[j] ){
             fprintf(jsonfile, "    \"Fortress\"");
+            cpt--;
           }
           break;
         case 19:
           if (listeCrypt[j]){
             fprintf(jsonfile, "    \"Keyguard\"");
+            cpt--;
           }
           break;
         default:
           break;
         }
-        if(j < i)
+        if((cpt > 1) & (listeCrypt[j]) ){
           fprintf(jsonfile, ",");
+
+        }
       }
       fprintf(jsonfile, " ],\n");
       ssidnum++;
