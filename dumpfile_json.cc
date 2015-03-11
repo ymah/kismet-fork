@@ -501,93 +501,119 @@ int Dumpfile_Json::Flush(){
     fprintf(jsonfile, " \"Max Seen\"   : %d,\n", net->snrdata.maxseenrate * 100);
 
     int listeCarrier[8];
-    int i;
+    int i,cpt;
     for(i=0;i<8;i++)
       listeCarrier[i]=0;
 
 
     fprintf(jsonfile, " \"Carrier\"    : [");
-    i = -1;
+    cpt = i = 0;
     if (net->snrdata.carrierset & (1 << (int) carrier_80211b))
       {
-        i++;
+        cpt++;
         listeCarrier[i] = 1;
       }
+    i++;
 
     if (net->snrdata.carrierset & (1 << (int) carrier_80211bplus))
       {
-        i++;
+        cpt++;
         listeCarrier[i] = 1;
       }
+        i++;
+
     if (net->snrdata.carrierset & (1 << (int) carrier_80211a))
       {
-        i++;
+        cpt++;
         listeCarrier[i] = 1;
       }
+        i++;
+
     if (net->snrdata.carrierset & (1 << (int) carrier_80211g))
       {
-        i++;
+        cpt++;
         listeCarrier[i] = 1;
       }
+    i++;
     if (net->snrdata.carrierset & (1 << (int) carrier_80211fhss))
       {
-        i++;
+        cpt++;
         listeCarrier[i] = 1;
       }
+    i++;
     if (net->snrdata.carrierset & (1 << (int) carrier_80211dsss))
       {
-        i++;
+        cpt++;
         listeCarrier[i] = 1;
       }
+    i++;
     if (net->snrdata.carrierset & (1 << (int) carrier_80211n20))
       {
-        i++;
+        cpt++;
         listeCarrier[i] = 1;
       }
+    i++;
     if (net->snrdata.carrierset & (1 << (int) carrier_80211n40))
       {
-        i++;
+        cpt++;
         listeCarrier[i] = 1;
       }
-
+    i++;
+    cpt++;
     int j;
 
-    for(j=0;j<=i;j++){
+    for(j=0;j<i;j++){
       switch(j){
       case 0:
-        if (listeCarrier[j])
+        if (listeCarrier[j]){
           fprintf(jsonfile, " \"IEEE 802.11b\"");
+          cpt--;
+        }
         break;
       case 1:
-        if (listeCarrier[j])
+        if (listeCarrier[j]){
           fprintf(jsonfile, " \"IEEE 802.11b+\"");
+          cpt--;
+        }
         break;
       case 2:
-        if (listeCarrier[j])
+        if (listeCarrier[j]){
           fprintf(jsonfile, " \"IEEE 802.11a\"");
+          cpt--;
+        }
         break;
       case 3:
-        if ((net->snrdata.carrierset & (1 << (int) carrier_80211g)) & listeCarrier[j])
+        if (listeCarrier[j]){
           fprintf(jsonfile, " \"IEEE 802.11g\"");
+          cpt--;
+        }
         break;
       case 4:
-        if (listeCarrier[j])
+        if (listeCarrier[j]){
           fprintf(jsonfile, " \"IEEE 802.11 FHSS\"");
+          cpt--;
+        }
         break;
       case 5:
-        if (listeCarrier[j])
+        if (listeCarrier[j]){
           fprintf(jsonfile, " \"IEEE 802.11 DSSS\"");
+          cpt--;
+        }
         break;
       case 6:
-        if( listeCarrier[j])
+        if( listeCarrier[j]){
           fprintf(jsonfile, " \"IEEE 802.11n 20MHz\"");
+          cpt--;
+        }
         break;
       case 7:
-        if( listeCarrier[j])
+        if( listeCarrier[j]){
           fprintf(jsonfile, " \"IEEE 802.11n 40MHz\"");
+          cpt--;
+        }
         break;
       }
-      if(j < i)
+      if((cpt > 1) & listeCarrier[j])
         fprintf(jsonfile, ",");
     }
     fprintf(jsonfile, " ],\n");
@@ -596,57 +622,71 @@ int Dumpfile_Json::Flush(){
     i = 0;
     for(i=0;i<5;i++)
       listeEnco[i] = 0;
-    i = -1;
+    i = 0;
+    cpt = 0;
     if (net->snrdata.encodingset & (1 << (int) encoding_cck)){
-      i++;
+      cpt++;
       listeEnco[i] = 1;
     }
+    i++;
     if (net->snrdata.encodingset & (1 << (int) encoding_pbcc)){
-      i++;
+      cpt++;
       listeEnco[i] = 1;
     }
+    i++;
     if (net->snrdata.encodingset & (1 << (int) encoding_ofdm)){
-      i++;
+      cpt++;
       listeEnco[i] = 1;
     }
-
+      i++;
     if (net->snrdata.encodingset & (1 << (int) encoding_dynamiccck)){
-      i++;
+      cpt++;
       listeEnco[i] = 1;
     }
-
+      i++;
     if (net->snrdata.encodingset & (1 << (int) encoding_gfsk)){
-      i++;
+      cpt++;
       listeEnco[i] = 1;
-      if(j < i)
-        fprintf(jsonfile, ",");
-    }
 
+    }
+    cpt++;
     fprintf(jsonfile, " \"Enconding\"    : [");
 
     for(j=0;j<i;j++){
       switch(j){
       case 0:
-        if (listeEnco[j])
+        if (listeEnco[j]){
           fprintf(jsonfile, " \"CCK\",\n");
+          cpt--;
+        }
         break;
       case 1:
-        if(listeEnco[j])
+        if(listeEnco[j]){
           fprintf(jsonfile, " \"PBCC\",\n");
+          cpt--;
+        }
         break;
       case 2:
-        if(listeEnco[j])
+        if(listeEnco[j]){
           fprintf(jsonfile, " \"OFDM\",\n");
+          cpt--;
+        }
         break;
       case 3:
-        if(listeEnco[j])
+        if(listeEnco[j]){
           fprintf(jsonfile, " \"Dynamic CCK-OFDM\",\n");
+          cpt--;
+        }
         break;
       case 4:
-        if(listeEnco[j])
+        if(listeEnco[j]){
           fprintf(jsonfile, " GFSK,\n");
+          cpt--;
+        }
         break;
       }
+      if((cpt > 1) & listeEnco[j])
+        fprintf(jsonfile,",");
 
     }
     fprintf(jsonfile, " ],\n");
@@ -658,22 +698,14 @@ int Dumpfile_Json::Flush(){
     fprintf(jsonfile, " \"Fragments\"  : %d,\n", net->fragments);
     fprintf(jsonfile, " \"Retries\"    : %d,\n", net->retries);
     fprintf(jsonfile, " \"Total\"      : %d,\n", net->llc_packets + net->data_packets);
-    fprintf(jsonfile, " \"Datasize\"   : %llu",
+    fprintf(jsonfile, " \"Datasize\"   : %llu,\n",
             (long long unsigned int) net->datasize);
 
     if (net->gpsdata.gps_valid) {
-      fprintf(jsonfile, " \"Min Pos\"    : \"at %f Lon %f Alt %f Spd %f\",\n", 
-              net->gpsdata.min_lat, net->gpsdata.min_lon,
-              net->gpsdata.min_alt, net->gpsdata.min_spd);
-      fprintf(jsonfile, " \"Max Pos\"    : \"Lat %f Lon %f Alt %f Spd %f\",\n", 
-              net->gpsdata.max_lat, net->gpsdata.max_lon,
-              net->gpsdata.max_alt, net->gpsdata.max_spd);
-      fprintf(jsonfile, " \"Peak Pos\"   : \"Lat %f Lon %f Alt %f\"\n", 
-              net->snrdata.peak_lat, net->snrdata.peak_lon,
-              net->snrdata.peak_alt);
-      fprintf(jsonfile, " \"Avg Pos\"    : \"AvgLat %f AvgLon %f AvgAlt %f\"\n",
-              net->gpsdata.aggregate_lat, net->gpsdata.aggregate_lon, 
-              net->gpsdata.aggregate_alt);
+      fprintf(jsonfile,"\"Latitude\" : %f,\n",net->gpsdata.aggregate_lat);
+      fprintf(jsonfile,"\"Longitude\" : %f,\n",net->gpsdata.aggregate_lon);
+      fprintf(jsonfile,"\"Altitude\" : %f,\n",net->gpsdata.aggregate_alt);
+
     }
 
 
@@ -712,6 +744,7 @@ int Dumpfile_Json::Flush(){
       int clinum = 0;
       iteClient = net->client_map.end();
       iteClient--;
+
       for (y = net->client_map.begin(); y != net->client_map.end(); ++y){
         Netracker::tracked_client *cli = y->second;
         clinum++;
@@ -738,7 +771,7 @@ int Dumpfile_Json::Flush(){
           ctype = "Unknown";
           break;
         }
-
+        fprintf(jsonfile,"\n%d\n",clinum);
         fprintf(jsonfile, " \"Client\" %d : {",clinum);
         fprintf(jsonfile, "  \"Manuf\"      : \"%s\",\n", cli->manuf.c_str());
         fprintf(jsonfile, "  \"First\"      : \"%.24s\",\n", ctime(&(cli->first_time)));
