@@ -164,10 +164,9 @@ int Dumpfile_Json::Flush(){
       ntype = "unknown";
       break;
     }
-    fprintf(jsonfile,"{\n");
 
-    fprintf(jsonfile,"\"Network\":%d,\n",netnum);
-    fprintf(jsonfile,"\"détails\" : {\n");
+    fprintf(jsonfile,"\n{\n\"Network\":%d,\n",netnum);
+    fprintf(jsonfile,"\"details\" : {\n");
     fprintf(jsonfile, "\"Manuf\"      : \"%s\",\n", net->manuf.c_str());
     fprintf(jsonfile, "\"First\"      : \"%.24s\",\n", ctime(&(net->first_time)));
     fprintf(jsonfile, "\"Last\"       : \"%.24s\",\n", ctime(&(net->last_time)));
@@ -175,7 +174,7 @@ int Dumpfile_Json::Flush(){
     fprintf(jsonfile, "\"BSSID\"      : \"%s\",\n", net->bssid.Mac2String().c_str());
 
     int ssidnum = 1;
-    fprintf(jsonfile,"\"détail_BSSID\":{\n");
+    fprintf(jsonfile,"\"BSSID_details\":{\n");
     for (map<uint32_t, Netracker::adv_ssid_data *>::iterator m  =
            net->ssid_map.begin(); m != net->ssid_map.end(); ++m) {
 
@@ -234,35 +233,35 @@ int Dumpfile_Json::Flush(){
         listeCrypt[i] = 1;
         cpt++;
       }
-        i++;
+      i++;
       if (m->second->cryptset == crypt_wep){
         //fprintf(jsonfile, "  \"WEP\"");
 
         listeCrypt[i] = 1;
         cpt++;
       }
-        i++;
+      i++;
       if (m->second->cryptset & crypt_layer3){
         //fprintf(jsonfile, "    \"Layer3\"");
 
         listeCrypt[i] = 1;
         cpt++;
       }
-        i++;
+      i++;
       if (m->second->cryptset & crypt_wpa_migmode){
         //fprintf(jsonfile, "    \"WPA Migration Mode\"");
 
         listeCrypt[i] = 1;
         cpt++;
       }
-        i++;
+      i++;
       if (m->second->cryptset & crypt_wep40){
         //fprintf(jsonfile, "   \"WEP40\"");
 
         listeCrypt[i] = 1;
         cpt++;
       }
-        i++;
+      i++;
       if (m->second->cryptset & crypt_wep104){
         //fprintf(jsonfile, "    \"WEP104\"");
 
@@ -274,14 +273,14 @@ int Dumpfile_Json::Flush(){
         fprintf(jsonfile, "    Encryption : WPA\n");
       */
 
-        i++;
+      i++;
       if (m->second->cryptset & crypt_psk){
         //fprintf(jsonfile, "    \"WPA+PSK\"");
 
         listeCrypt[i] = 1;
         cpt++;
       }
-        i++;
+      i++;
 
       if (m->second->cryptset & crypt_tkip){
         //fprintf(jsonfile, "    \"WPA+TKIP\"");
@@ -296,21 +295,21 @@ int Dumpfile_Json::Flush(){
         listeCrypt[i] = 1;
         cpt++;
       }
-        i++;
+      i++;
       if (m->second->cryptset & crypt_aes_ccm){
         //fprintf(jsonfile, "    \"WPA+AES-CCM\"");
 
         listeCrypt[i] = 1;
         cpt++;
       }
-        i++;
+      i++;
       if (m->second->cryptset & crypt_leap){
         //fprintf(jsonfile, "    \"WPA+LEAP\"");
 
         listeCrypt[i] = 1;
         cpt++;
       }
-        i++; 
+      i++; 
 
       if (m->second->cryptset & crypt_ttls){
         //fprintf(jsonfile, "    \"WPA+TTLS\"");
@@ -494,10 +493,12 @@ int Dumpfile_Json::Flush(){
 
         }
       }
-      fprintf(jsonfile, " ],\n");
+      fprintf(jsonfile, " ]\n");
+      fprintf(jsonfile,"}\n");
       ssidnum++;
 
     }
+    fprintf(jsonfile,"},\n");
     fprintf(jsonfile, " \"Max Seen\"   : %d,\n", net->snrdata.maxseenrate * 100);
 
     int listeCarrier[8];
@@ -520,14 +521,14 @@ int Dumpfile_Json::Flush(){
         cpt++;
         listeCarrier[i] = 1;
       }
-        i++;
+    i++;
 
     if (net->snrdata.carrierset & (1 << (int) carrier_80211a))
       {
         cpt++;
         listeCarrier[i] = 1;
       }
-        i++;
+    i++;
 
     if (net->snrdata.carrierset & (1 << (int) carrier_80211g))
       {
@@ -619,9 +620,10 @@ int Dumpfile_Json::Flush(){
     fprintf(jsonfile, " ],\n");
 
     int listeEnco[5];
-    i = 0;
     for(i=0;i<5;i++)
       listeEnco[i] = 0;
+
+
     i = 0;
     cpt = 0;
     if (net->snrdata.encodingset & (1 << (int) encoding_cck)){
@@ -638,49 +640,50 @@ int Dumpfile_Json::Flush(){
       cpt++;
       listeEnco[i] = 1;
     }
-      i++;
+    i++;
     if (net->snrdata.encodingset & (1 << (int) encoding_dynamiccck)){
       cpt++;
       listeEnco[i] = 1;
     }
-      i++;
+    i++;
     if (net->snrdata.encodingset & (1 << (int) encoding_gfsk)){
       cpt++;
       listeEnco[i] = 1;
 
     }
+    i++;
     cpt++;
-    fprintf(jsonfile, " \"Enconding\"    : [");
+    fprintf(jsonfile, " \"Encoding\"    : [");
 
     for(j=0;j<i;j++){
       switch(j){
       case 0:
         if (listeEnco[j]){
-          fprintf(jsonfile, " \"CCK\",\n");
+          fprintf(jsonfile, " \"CCK\"");
           cpt--;
         }
         break;
       case 1:
         if(listeEnco[j]){
-          fprintf(jsonfile, " \"PBCC\",\n");
+          fprintf(jsonfile, " \"PBCC\"");
           cpt--;
         }
         break;
       case 2:
         if(listeEnco[j]){
-          fprintf(jsonfile, " \"OFDM\",\n");
+          fprintf(jsonfile, " \"OFDM\"");
           cpt--;
         }
         break;
       case 3:
         if(listeEnco[j]){
-          fprintf(jsonfile, " \"Dynamic CCK-OFDM\",\n");
+          fprintf(jsonfile, " \"Dynamic CCK-OFDM\"");
           cpt--;
         }
         break;
       case 4:
         if(listeEnco[j]){
-          fprintf(jsonfile, " GFSK,\n");
+          fprintf(jsonfile, " \"GFSK\"");
           cpt--;
         }
         break;
@@ -698,10 +701,14 @@ int Dumpfile_Json::Flush(){
     fprintf(jsonfile, " \"Fragments\"  : %d,\n", net->fragments);
     fprintf(jsonfile, " \"Retries\"    : %d,\n", net->retries);
     fprintf(jsonfile, " \"Total\"      : %d,\n", net->llc_packets + net->data_packets);
-    fprintf(jsonfile, " \"Datasize\"   : %llu,\n",
+    fprintf(jsonfile, " \"Datasize\"   : %llu",
             (long long unsigned int) net->datasize);
 
+    int virgule;
+    virgule = 0;
     if (net->gpsdata.gps_valid) {
+      virgule = 1;
+      fprintf(jsonfile,",\n");
       fprintf(jsonfile,"\"Latitude\" : %f,\n",net->gpsdata.aggregate_lat);
       fprintf(jsonfile,"\"Longitude\" : %f,\n",net->gpsdata.aggregate_lon);
       fprintf(jsonfile,"\"Altitude\" : %f,\n",net->gpsdata.aggregate_alt);
@@ -711,6 +718,7 @@ int Dumpfile_Json::Flush(){
 
     if (net->guess_ipdata.ip_type > ipdata_factoryguess && 
         net->guess_ipdata.ip_type < ipdata_group) {
+      virgule = 1;
       string iptype;
       fprintf(jsonfile,",");
       switch (net->guess_ipdata.ip_type) {
@@ -736,69 +744,81 @@ int Dumpfile_Json::Flush(){
       fprintf(jsonfile, " \"IP Gateway\" : %s,\n", 
               inet_ntoa(net->guess_ipdata.ip_gateway));
 
-      fprintf(jsonfile, " \"Last BSSTS\" : %llu\n", 
+      fprintf(jsonfile, " \"Last BSSTS\" : %llu,\n", 
               (long long unsigned int) net->bss_timestamp);
-
-      fprintf(jsonfile,"\"Clients\" :[");
-
-      int clinum = 0;
-      iteClient = net->client_map.end();
-      iteClient--;
-
-      for (y = net->client_map.begin(); y != net->client_map.end(); ++y){
-        Netracker::tracked_client *cli = y->second;
-        clinum++;
-        if (cli->type == client_remove)
-          continue;
-        string ctype;
-        switch (cli->type) {
-        case client_fromds:
-          ctype = "From Distribution";
-          break;
-        case client_tods:
-          ctype = "To Distribution";
-          break;
-        case client_interds:
-          ctype = "Inter-Distribution";
-          break;
-        case client_established:
-          ctype = "Established";
-          break;
-        case client_adhoc:
-          ctype = "Ad-hoc";
-          break;
-        default:
-          ctype = "Unknown";
-          break;
-        }
-        fprintf(jsonfile,"\n%d\n",clinum);
-        fprintf(jsonfile, " \"Client\" %d : {",clinum);
-        fprintf(jsonfile, "  \"Manuf\"      : \"%s\",\n", cli->manuf.c_str());
-        fprintf(jsonfile, "  \"First\"      : \"%.24s\",\n", ctime(&(cli->first_time)));
-        fprintf(jsonfile, "  \"Last\"       : \"%.24s\",\n", ctime(&(cli->last_time)));
-        fprintf(jsonfile, "  \"Type\"       : \"%s\",\n", ctype.c_str());
-        fprintf(jsonfile, "  \"MAC\"        : \"%s\",\n", cli->mac.Mac2String().c_str());
-        fprintf(jsonfile,"}");
-        if(y == iteClient)
-          fprintf(jsonfile,",\n");
-        else
-          fprintf(jsonfile,"\n");
-      }
-      fprintf(jsonfile,"]");
     }
 
-    fprintf(jsonfile,"}\n");
-    fprintf(jsonfile,"}\n");
-    fprintf(jsonfile,"}\n");
+
+
+    if(!virgule)
+      fprintf(jsonfile,",\n");
+
+    fprintf(jsonfile,"\"Clients\" :[\n");
+
+    int clinum = 0;
+    int sizeClient = 0;
+    for (y = net->client_map.begin(); y != net->client_map.end(); ++y)
+      sizeClient++;
+    iteClient = net->client_map.end();
+
+    for (y = net->client_map.begin(); y != net->client_map.end(); ++y){
+      Netracker::tracked_client *cli = y->second;
+      clinum++;
+      if (cli->type == client_remove)
+        continue;
+      string ctype;
+      switch (cli->type) {
+      case client_fromds:
+        ctype = "From Distribution";
+        break;
+      case client_tods:
+        ctype = "To Distribution";
+        break;
+      case client_interds:
+        ctype = "Inter-Distribution";
+        break;
+      case client_established:
+        ctype = "Established";
+        break;
+      case client_adhoc:
+        ctype = "Ad-hoc";
+        break;
+      default:
+        ctype = "Unknown";
+        break;
+      }
+      fprintf(jsonfile, " {\"Client\""" : {\n");
+      fprintf(jsonfile,"\"num\":%d,\n",clinum);
+      fprintf(jsonfile, "  \"Manuf\"      : \"%s\",\n", cli->manuf.c_str());
+      fprintf(jsonfile, "  \"First\"      : \"%.24s\",\n", ctime(&(cli->first_time)));
+      fprintf(jsonfile, "  \"Last\"       : \"%.24s\",\n", ctime(&(cli->last_time)));
+      fprintf(jsonfile, "  \"Type\"       : \"%s\",\n", ctype.c_str());
+      fprintf(jsonfile, "  \"MAC\"        : \"%s\"\n", cli->mac.Mac2String().c_str());
+      fprintf(jsonfile,"}\n}");
+      if(clinum !=  sizeClient )
+        fprintf(jsonfile,",\n");
+      else
+        fprintf(jsonfile,"\n");
+    }
+
+
+    fprintf(jsonfile,"]");
+
+
     fprintf(jsonfile,"}\n");
 
+
+    fprintf(jsonfile,"}\n");
     if((x != finalIte) & (x != tracknet.end()))
       fprintf(jsonfile,",");
   }
-  fprintf(jsonfile,"]}");
+
+  fprintf(jsonfile,"]\n}");
+
+
 
   fflush(jsonfile);
-  
+
   fclose(jsonfile);
 
   jsonfile = NULL;
