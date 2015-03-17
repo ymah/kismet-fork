@@ -694,6 +694,17 @@ int Dumpfile_Json::Flush(){
     }
     fprintf(jsonfile, " ],\n");
 
+
+
+    if (net->snrdata.last_signal_rssi != 0) {
+      fprintf(jsonfile, " \"signal_rssi\":%d,\n \"noise_rssi\":%d,\n",
+              net->snrdata.last_signal_rssi, net->snrdata.last_noise_rssi);
+    }
+    if (net->snrdata.last_signal_dbm != 0) {
+      fprintf(jsonfile, " \"signal_dbm\":%d, \n\"noise_dbm\":%d,\n",
+              net->snrdata.last_signal_dbm, net->snrdata.last_noise_dbm);
+    }
+
     fprintf(jsonfile, " \"Channel\"    : %d,\n", net->channel);
     fprintf(jsonfile, " \"LLC\"        : %d,\n", net->llc_packets);
     fprintf(jsonfile, " \"Data\"       : %d,\n", net->data_packets);
