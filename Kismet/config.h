@@ -281,6 +281,7 @@
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
+
 /* proftpd argv stuff */
 #define PF_ARGV_NONE        0
 #define PF_ARGV_NEW     	1
@@ -317,8 +318,8 @@
 #define MAX_SSID_LEN    255
 
 /* Namespace (on non-obj-c files) */
-#ifndef __IN_OBJC_FILE__
-using namespace std;
+#ifndef __IN_OBJC_FILE_
+
 #define __STL_USE_NAMESPACES
 #endif
 
