@@ -628,7 +628,7 @@ configure: failed program was:
 configure:5565: result: no
 configure:5463: checking whether pthreads work without any flags
 configure:5556: gcc -o conftest -g -O2    -rdynamic conftest.c   >&5
-/tmp/cckSDiRr.o: In function `main':
+/tmp/ccJNq864.o: In function `main':
 /home/mahieddine/Documents/cours/M1S2/PJI/kismet/boulot2/kismet2/Kismet/conftest.c:65: undefined reference to `pthread_create'
 /home/mahieddine/Documents/cours/M1S2/PJI/kismet/boulot2/kismet2/Kismet/conftest.c:66: undefined reference to `pthread_join'
 /home/mahieddine/Documents/cours/M1S2/PJI/kismet/boulot2/kismet2/Kismet/conftest.c:68: undefined reference to `__pthread_register_cancel'
@@ -960,7 +960,7 @@ configure:5653: $? = 0
 configure:5662: result: yes
 configure:5782: checking for libm math function in std libs
 configure:5804: gcc -o conftest -Werror -g -O2  -pthread  -rdynamic conftest.c  -ldl >&5
-/tmp/ccxYHJdq.o: In function `main':
+/tmp/cc8ddDx0.o: In function `main':
 /home/mahieddine/Documents/cours/M1S2/PJI/kismet/boulot2/kismet2/Kismet/conftest.c:68: undefined reference to `pow'
 collect2: error: ld returned 1 exit status
 configure:5804: $? = 1
@@ -1158,7 +1158,7 @@ configure:6152: checking for panel.h
 configure:6152: result: yes
 configure:6176: checking for setproctitle
 configure:6176: gcc -o conftest -g -O2  -pthread -I/usr/include/ncurses  -rdynamic conftest.c  -ldl -lm >&5
-/tmp/cccSjcd4.o: In function `main':
+/tmp/ccXJE3Kx.o: In function `main':
 /home/mahieddine/Documents/cours/M1S2/PJI/kismet/boulot2/kismet2/Kismet/conftest.c:95: undefined reference to `setproctitle'
 collect2: error: ld returned 1 exit status
 configure:6176: $? = 1
@@ -1439,7 +1439,7 @@ configure:6187: checking for libutil.h
 configure:6187: result: no
 configure:6197: checking for setproctitle in -lutil
 configure:6222: gcc -o conftest -g -O2  -pthread -I/usr/include/ncurses  -rdynamic conftest.c -lutil   -ldl -lm >&5
-/tmp/ccQ44bjl.o: In function `main':
+/tmp/cc1uxcHU.o: In function `main':
 /home/mahieddine/Documents/cours/M1S2/PJI/kismet/boulot2/kismet2/Kismet/conftest.c:72: undefined reference to `setproctitle'
 collect2: error: ld returned 1 exit status
 configure:6222: $? = 1
