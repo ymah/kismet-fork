@@ -3,6 +3,7 @@ from pprint import pprint
 from os import listdir
 from os.path import isfile, join
 from datetime import datetime
+import time
 from elasticsearch import Elasticsearch
 
 es = Elasticsearch([{'host':'127.0.0.1'}])
@@ -11,18 +12,24 @@ es = Elasticsearch([{'host':'127.0.0.1'}])
 PATH_LOG ='/var/log/kismet/'
 
 
-onlyfiles = [ f for f in listdir(PATH_LOG) if isfile(join(PATH_LOG,f)) ]
+jsonfiles = [ f for f in listdir(PATH_LOG) if isfile(join(PATH_LOG,f)) ]
 
-i = 0
+numberInsert = 0
+numberFile = 0
+for i in jsonfiles:
+    numberFile+=1
+    print("Traitemant du fichier : {0} ".format(i))
+    json_data=open(PATH_LOG+i)
+    data = json.load(json_data)
+    for f in data['Networks']:
+        pprint(f)
+        json_data.close()
+        post = f
+        es.index(index='wifi_audit',doc_type='posts',id=numberInsert,body=post)
+        es.indices.refresh(index='wifi_audit')
+        numberInsert+=1
+        print("{0} insertions".format(numberInsert))
+    print("Fin du traitement du fichier {0} ".format(i))
+    time.sleep(2)
 
-json_data=open(PATH_LOG+onlyfiles[0])
-data = json.load(json_data)
-
-
-for f in data['Networks']:
-    pprint(f)
-    json_data.close()
-    post = f
-    es.index(index='wifi_audit',doc_type='posts',id=i,body=post)
-    es.indices.refresh(index='wifi_audit')
-    i+=1
+print("{0} fichiers traités pour {1} insertions".format(numberFile,numberInsert))
