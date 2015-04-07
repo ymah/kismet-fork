@@ -171,7 +171,7 @@ int Dumpfile_Json::Flush(){
     fprintf(jsonfile, "\"First\"      : \"%.24s\",\n", ctime(&(net->first_time)));
     fprintf(jsonfile, "\"Last\"       : \"%.24s\",\n", ctime(&(net->last_time)));
     fprintf(jsonfile, "\"Type\"       : \"%s\",\n", ntype.c_str());
-    fprintf(jsonfile, "\"BSSID\"      : \"%s\",\n", net->bssid.Mac2String().c_str());
+    fprintf(jsonfile, "\"BSSID_MAC\"      : \"%s\",\n", net->bssid.Mac2String().c_str());
 
     int ssidnum = 1;
     fprintf(jsonfile,"\"BSSID_details\":{\n");
@@ -197,7 +197,6 @@ int Dumpfile_Json::Flush(){
       default:
         break;
       }
-      fprintf(jsonfile, "\"SSID_num\" :%d,\n", ssidnum);
       fprintf(jsonfile, "\"Type\": \"%s\",\n", typestr.c_str());
       fprintf(jsonfile, "\"SSID\": \"%s %s\" ,\n", m->second->ssid.c_str(),
               m->second->ssid_cloaked ? "(Cloaked)" : "");
@@ -362,8 +361,6 @@ int Dumpfile_Json::Flush(){
       int j;
 
       for(j=0;j<i;j++){
-        // if(i == -1)
-        //   break;
         switch(j){
         case 0:
           if(listeCrypt[j]){

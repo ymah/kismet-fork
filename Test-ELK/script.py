@@ -23,6 +23,6 @@ for f in data['Networks']:
     pprint(f)
     json_data.close()
     post = f
-    es.index(index='my_index',doc_type='posts',id=i,body=post)
-    es.indices.refresh(index='my_index')
+    es.index(index='wifi_audit',doc_type='posts',id=i,body=post)
+    es.indices.refresh(index='wifi_audit')
     i+=1
