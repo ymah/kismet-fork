@@ -810,7 +810,7 @@ int Dumpfile_Json::Flush(){
     }
 
 
-    fprintf(jsonfile,"]");
+    fprintf(jsonfile,"]\n");
 
 
     fprintf(jsonfile,"}\n");
