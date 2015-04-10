@@ -1,3 +1,9 @@
+# Author : Mahieddine Yaker (mahieddine.yaker@gmail.com)
+# 10/04/2015
+
+
+
+
 import json
 from pprint import pprint
 from os import listdir
