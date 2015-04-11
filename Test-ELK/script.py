@@ -1,9 +1,6 @@
 # Author : Mahieddine Yaker (mahieddine.yaker@gmail.com)
 # 10/04/2015
 
-
-
-
 import json
 from pprint import pprint
 from os import listdir
@@ -22,7 +19,7 @@ def getJsonFiles(path):
     return jsonfiles
 
 
-def dumpToElsch(jsonfiles,elschClient):
+def dumpToElsch(jsonfiles,elschClient,index):
     """
     Script permettant de charger les données présentes dans la liste
     de fichiers jsonfiles, dans la base de donnée elasticsearch fournie
@@ -39,9 +36,9 @@ def dumpToElsch(jsonfiles,elschClient):
             pprint(f)
             json_data.close()
             post = f
-            elschClient.index(index='wifi_audit',doc_type='posts',\
+            elschClient.index(index=index,doc_type='posts',\
                               id=numberInsert,body=post)
-            elschClient.indices.refresh(index='wifi_audit')
+            elschClient.indices.refresh(index=index)
             numberInsert+=1
             print("{0} insertions".format(numberInsert))
         print("Fin du traitement du fichier {0} ".format(i))
@@ -49,9 +46,6 @@ def dumpToElsch(jsonfiles,elschClient):
 
     print("{0} fichiers traités pour {1} insertions".format(numberFile,\
                                                             numberInsert))
-
-
-
 
 
 
@@ -63,4 +57,4 @@ if __name__ == "__main__":
     es = Elasticsearch([{'host':'127.0.0.1'}])
     PATH_LOG ='/var/log/kismet/'
     jsonfiles = getJsonFiles(PATH_LOG)
-    dumpToElsch(jsonfiles,es)
+    dumpToElsch(jsonfiles,es,'wifi_audit')
