@@ -1,6 +1,7 @@
 #Kismet-fork
 Fork de kismet pour le PJI elasticsearch et audit wifi
-Par Mahieddine Yaker (mahieddine DOT yaker (AT) gmail DOT com)
+Par Mahieddine Yaker
+(mahieddine DOT yaker (AT) gmail DOT com)
 
 ####Requis :
 
