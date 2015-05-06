@@ -1,7 +1,11 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # Author : Mahieddine Yaker (mahieddine.yaker@gmail.com)
 # 10/04/2015
 # script utilisé pour charger des fichiers json dans la base de donnée
 # Elasticsearch
+
 import json
 from pprint import pprint
 from os import listdir
@@ -16,7 +20,7 @@ def getJsonFiles(path):
     Script permettant de récuperer les fichiers jsons à partir d'un
     path fourni en parametre
     """
-    jsonfiles = [ f for f in listdir(path) if isfile(join(path,f)) ]
+    jsonfiles = [ f for f in listdir(path) if (isfile(join(path,f)) and f.lower().endswith('.json')) ]
     return jsonfiles
 
 
