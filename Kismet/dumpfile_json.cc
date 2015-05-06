@@ -214,7 +214,7 @@ int Dumpfile_Json::Flush(){
       fprintf(jsonfile, "    \"Packets\"    : %d,\n", m->second->packets);
 
       if (m->second->dot11d_vec.size() > 0) {
-        fprintf(jsonfile, "    \"Country\"    : \"%s\"\n", 
+        fprintf(jsonfile, "    \"Country\"    : \"%s\",\n", 
                 m->second->dot11d_country.c_str());
       }
       fprintf(jsonfile,"\"Encryption\" : [");
