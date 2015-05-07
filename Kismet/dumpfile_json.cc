@@ -174,7 +174,12 @@ int Dumpfile_Json::Flush(){
     fprintf(jsonfile, "\"BSSID_MAC\"      : \"%s\",\n", net->bssid.Mac2String().c_str());
 
     int ssidnum = 1;
+    int count_ssid=0;
     fprintf(jsonfile,"\"BSSID_details\":{\n");
+    for (map<uint32_t, Netracker::adv_ssid_data *>::iterator m  =
+           net->ssid_map.begin(); m != net->ssid_map.end(); ++m) {
+      count_ssid++;
+    }
     for (map<uint32_t, Netracker::adv_ssid_data *>::iterator m  =
            net->ssid_map.begin(); m != net->ssid_map.end(); ++m) {
 
@@ -491,7 +496,11 @@ int Dumpfile_Json::Flush(){
         }
       }
       fprintf(jsonfile, " ]\n");
-      fprintf(jsonfile,"}\n");
+      fprintf(jsonfile,"}");
+      if(ssidnum < count_ssid)
+        fprintf(jsonfile,",\n");
+      else
+        fprintf(jsonfile,"\n");
       ssidnum++;
 
     }
